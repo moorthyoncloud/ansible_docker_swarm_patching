@@ -21,32 +21,35 @@ This Ansible playbook automates the safe and sequential patching of Docker Swarm
 
 ---
 
-## 🧩 Inventory Example (`hosts.ini`)
-[swarm_nodes]
+## 🧩 Inventory
+- Example (`hosts.ini`)
+`[swarm_nodes]
 manager1
 manager2
 worker1
-worker2
+worker2`
 
-[manager_node]
-manager1  # Used to run docker node update commands
+`[manager_node]
+manager1` # Used to run docker node update commands
 
 ## 🛠️ Usage
-
+```bash
 ansible-playbook -i hosts.ini patch_swarm_nodes.yml
+```
+## 📄 Log Output
 
-Make sure:
+Logs are saved to patch_swarm_nodes.log in the directory where the playbook is run.
+Example:
 
-You have SSH access to all nodes.
-Docker Swarm is already initialized and nodes are part of the cluster.
-The control machine has Ansible installed.
+`worker1 - 2025-05-23T12:34:56Z - Updated packages: bash, curl, docker-ce`
 
-📄 Log Output
+## Make sure:
 
-Logs are saved to patch_swarm_nodes.log in the directory where the playbook is run. Example:
+- You have SSH access to all nodes.
+- Docker Swarm is already initialized and nodes are part of the cluster.
+- The control machine has Ansible installed.`
+## License
+This project is licensed under the MIT License.
 
-worker1 - 2025-05-23T12:34:56Z - Updated packages: bash, curl, docker-ce
-
-📬 Contributions & Feedback
-
-Feel free to open issues or submit pull requests to improve this playbook!
+## Author
+- [Shenbagamoorthy](https://github.com/moorthyoncloud)
