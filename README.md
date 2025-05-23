@@ -50,5 +50,3 @@ worker1 - 2025-05-23T12:34:56Z - Updated packages: bash, curl, docker-ce
 📬 Contributions & Feedback
 
 Feel free to open issues or submit pull requests to improve this playbook!
-
-Would you like me to generate a README.md file with this content for your GitHub repo?
