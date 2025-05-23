@@ -1,0 +1,37 @@
+
+- name: Patch Docker Swarm nodes one by one (YUM-based)
+  hosts: swarm_nodes
+  serial: 1  # Only one node at a time
+  become: yes
+  tasks:
+
+    - name: Drain the node
+      shell: docker node update --availability drain {{ inventory_hostname }}
+      delegate_to: manager_node
+
+    - name: Apply patches using YUM
+      yum:
+        name: '*'
+        state: latest
+      register: yum_update
+      notify: Reboot node
+
+    - name: Log updated packages
+      local_action: copy content="{{ inventory_hostname }} - {{ ansible_date_time.iso8601 }} - Updated packages: {{ yum_update.results | map(attribute='name') | join(', ') }}" dest=./patch_swarm_nodes.log
+
+    - name: Wait for node to become reachable
+      wait_for_connection:
+        timeout: 300
+
+    - name: Perform Docker health check
+      shell: docker info
+      register: docker_health_check
+      failed_when: "'Server Version' not in docker_health_check.stdout"
+
+    - name: Set node to active
+      shell: docker node update --availability active {{ inventory_hostname }}
+      delegate_to: manager_node
+
+  handlers:
+    - name: Reboot node
+      reboot:
